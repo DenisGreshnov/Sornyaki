@@ -1,0 +1,13 @@
+{% extends "base.html" %} {% block content %}
+<ol>
+    {% for image in context.images %}
+    <p>hi</p>
+    <img
+        src="{{ url_for('static', filename=image.path) }}"
+        alt="{{image.alt}}"
+        style="width: 600px; height: 600 / 16 * 9px"
+    />
+    {% endfor %}
+</ol>
+
+{% endblock %}

@@ -1,8 +1,9 @@
 from PIL.Image import Image
+from torch.types import Tensor
 from ultralytics import YOLO
 
 
-def get_boxes_xywh(image : Image) -> list:
+def get_boxes_xywh(image : Image) -> list[Tensor]:
     res = []
 
     model = YOLO("best.pt")  # pretrained YOLO11n model
