@@ -1,16 +1,22 @@
+from dataclasses import dataclass
 from PIL.Image import Image
 from torch.types import Tensor
 from ultralytics import YOLO
 
+@dataclass
+class ProcessedImage():
+    image : Image
+    boxes : list[Tensor]
 
-def get_boxes_xywh(image : Image) -> list[Tensor]:
-    res = []
 
-    model = YOLO("best.pt")  # pretrained YOLO11n model
+def process_image(image : str | Image) -> ProcessedImage:
+    model = YOLO("model.pt")  # pretrained YOLO11n model
     results = model(image)
 
+    boxes = []
     for result in results:
         for box in result.boxes:
-            res.append(box.xywh[0].to("cpu"))
+            boxes.append(box.xywh[0].to("cpu"))
+        image = result
 
-    return res
+    return ProcessedImage(image, boxes)
