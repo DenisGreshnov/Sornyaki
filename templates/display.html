@@ -5,27 +5,32 @@
         <div
             class="w-2xl grid grid-cols-3 gap-4 p-4 rounded-lg border-2 border-color-stone-800"
         >
-            {% for image in context.images %}
+            {% for ind, image in enumerate(context.images) %}
             <div class="bg-stone-800 rounded-2xl">
                 <div class="h-16 sm:h-16"></div>
                 <img
-                    src="{{ url_for('static', filename=image.path) }}"
-                    alt="{{image.alt}}"
+                    src={{ url_for('static', filename=image.path) }}
+                    alt={{image.alt}}
                     class="w-full object-cover block"
                 />
                 <!-- <div class="h-16 sm:h-16"></div> -->
                 <div class="mt-2 p-2 flex justify-center space-x-4">
-                    <button
+                    <a
+                        href="/xd"
+                        name="magnify"
                         class="w-10 h-10 rounded-full flex items-center justify-center shadow-sm"
                     >
                         <img src="static/search.png" />
-                    </button>
-                    <button
+                    </a>
+                    <a
+                        href={{ url_for('delete_image', ind=ind) }}
+                        name="delete"
                         class="w-10 h-10 rounded-full flex items-center justify-center shadow-sm"
                     >
                         <img src="static/trash.png" />
-                    </button>
+                    </a>
                     <button
+                        name="download"
                         class="w-10 h-10 rounded-full flex items-center justify-center shadow-sm"
                     >
                         <img src="static/download.png" />
