@@ -1,7 +1,5 @@
 import os
-import base64
 import PIL.Image
-from io import BytesIO
 from flask import Flask, request, redirect
 from flask import render_template
 
@@ -21,7 +19,7 @@ def index():
     context["images"] = []
 
     if request.method == 'POST':
-        print('post')
+        print('post', request.files)
         if 'file' not in request.files:
             print('No file attached in request')
             return redirect(request.url)
