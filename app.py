@@ -1,7 +1,8 @@
 import os
 import PIL.Image
 from flask import Flask, request, redirect
-from flask import render_template
+from flask import render_template, session
+from flask_session import Session
 
 from utils import process_image
 
@@ -9,10 +10,9 @@ from utils import process_image
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'static'
 app.secret_key = 'BAD_SECRET_KEY'
-
-context = {}
-context["images"] = []
-
+app.config["SESSION_PERMANENT"] = True
+app.config["SESSION_TYPE"] = "filesystem"
+Session(app)
 
 def check_allowed_file(filename): return True
 def secure_filename(filename): return filename
@@ -20,6 +20,7 @@ def secure_filename(filename): return filename
 
 @app.route("/",methods=['POST'])
 def index_post():
+    context = {}
 
     print('post', request.files)
     if 'file' not in request.files:
@@ -41,13 +42,18 @@ def index_post():
     processed_image = process_image(img).image
     processed_image.save(f"static/temp/{filename}")
 
-    context["images"].append({"path" : f"temp/{filename}"})
+    if not session.get("images"): session["images"] = []
+    session["images"].append({"path" : f"temp/{filename}"})
+    context["images"] = session["images"]
     return render_template('display.html', context=context), 200
 
 
 @app.route("/",methods=['GET'])
 def index_get():
-    return render_template("base.html"), 200
+    context = {}
+    if not session.get("images"): session["images"] = []
+    context["images"] = session["images"]
+    return render_template('display.html', context=context), 200
 
 
 if __name__ == '__main__':
