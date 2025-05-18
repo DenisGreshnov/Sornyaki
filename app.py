@@ -1,7 +1,9 @@
 import os
 import PIL.Image
+from pathlib import Path
+
 from flask import Flask, request, redirect
-from flask import render_template, session, redirect, url_for
+from flask import render_template, session, redirect, url_for, send_from_directory, send_file
 from flask_session import Session
 from uuid import uuid4
 from utils import process_image
@@ -16,6 +18,22 @@ Session(app)
 
 def check_allowed_file(filename): return True
 def secure_filename(filename): return filename
+
+
+
+@app.route("/download/<ind>", methods=["POST", "GET"])
+def download_image(ind):
+    try:
+        ind = int(ind)
+        path = session["images"][ind]["path"]
+
+        uploads = Path(app.root_path).joinpath(app.config['UPLOAD_FOLDER'])
+        return send_file(uploads / path,  as_attachment=True )
+
+    except Exception as e:
+        print("Failed to download", e)
+
+    return redirect(url_for('index')), 301
 
 
 @app.route("/magnify/<ind>", methods=["POST", "GET"])

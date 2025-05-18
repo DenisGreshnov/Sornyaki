@@ -30,12 +30,13 @@
                     >
                         <img src="static/trash.png" />
                     </a>
-                    <button
+                    <a
+                        href={{ url_for('download_image', ind=ind) }}
                         name="download"
                         class="w-10 h-10 rounded-full flex items-center justify-center shadow-sm"
                     >
                         <img src="static/download.png" />
-                    </button>
+                    </a>
                 </div>
             </div>
             {% endfor %}
