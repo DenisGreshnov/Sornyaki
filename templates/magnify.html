@@ -1,0 +1,19 @@
+{% extends "base.html" %} {% block content %}
+
+<div
+    id="static-modal"
+    data-modal-backdrop="static"
+    tabindex="-1"
+    aria-hidden="true"
+    class="flex justify-center items-center w-full"
+>
+    <div class="w-4xl bg-stone-800 rounded-xl grid grid-cols-2 gap-4 p-4 mt-8">
+        <div class="relative p-4 w-full max-w-2xl max-h-full">
+            <img
+                src={{ url_for('static', filename=magnified_image.path) }}
+                class="w-full object-cover block"
+            />
+        </div>
+    </div>
+</div>
+{% endblock %}

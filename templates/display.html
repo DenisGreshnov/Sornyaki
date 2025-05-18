@@ -2,18 +2,19 @@
 <ol>
     <div class="flex justify-center mt-4">
         <!-- <div class="w-2xl grid grid-cols-4 gap-4 border-solid"> -->
+        {% if context.images %}
         <div
-            class="w-2xl grid grid-cols-3 gap-4 p-4 rounded-lg border-2 border-color-stone-800"
+            class="w-2xl grid grid-cols-3 gap-4 p-4 rounded-xl border-2 border-color-stone-800"
         >
+        {% endif %}
             {% for ind, image in enumerate(context.images) %}
-            <div class="bg-stone-800 rounded-2xl">
+            <div class="bg-stone-800 rounded-xl">
                 <div class="h-16 sm:h-16"></div>
                 <img
                     src={{ url_for('static', filename=image.path) }}
                     alt={{image.alt}}
                     class="w-full object-cover block"
                 />
-                <!-- <div class="h-16 sm:h-16"></div> -->
                 <div class="mt-2 p-2 flex justify-center space-x-4">
                     <a
                         href={{ url_for('magnify_image', ind=ind) }}
@@ -38,7 +39,9 @@
                 </div>
             </div>
             {% endfor %}
+        {% if context.images %}
         </div>
+        {% endif %}
     </div>
 </ol>
 
