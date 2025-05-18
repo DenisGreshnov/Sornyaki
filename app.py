@@ -2,8 +2,7 @@ import os
 import PIL.Image
 from pathlib import Path
 
-from flask import Flask, request, redirect
-from flask import render_template, session, redirect, url_for, send_from_directory, send_file
+from flask import Flask, request, render_template, session, redirect, url_for, send_file
 from flask_session import Session
 from uuid import uuid4
 from utils import process_image
@@ -17,7 +16,7 @@ app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
 def check_allowed_file(filename): return True
-def secure_filename(filename): return filename
+def secure_filename(filename): return str(uuid4()) + '-' + filename
 
 
 
@@ -47,8 +46,9 @@ def magnify_image(ind):
 
     try:
         ind = int(ind)
-        magnified_image = session["images"][ind]
-        return render_template("magnify.html", magnified_image=magnified_image), 200
+        processed_image = session["images"][ind]["path"]
+        raw_image = "raw" + session["images"][ind]["path"].strip("processed")
+        return render_template("magnify.html", raw_image = raw_image, processed_image=processed_image, magnified_ind=ind), 200
     except ValueError as e:
         print(f"Error deleting {ind}, {e}")
         return redirect(url_for('index')), 301
@@ -102,11 +102,14 @@ def index():
     except IOError:
         return redirect(request.url)
 
-    os.makedirs("static/temp", exist_ok=True)
+    os.makedirs("static/processed", exist_ok=True)
+    os.makedirs("static/raw", exist_ok=True)
     processed_image = process_image(img).image
-    processed_image.save(f"static/temp/{filename}")
 
-    session["images"].append({"path" : f"temp/{filename}"})
+    img.save(f"static/raw/{filename}")
+    processed_image.save(f"static/processed/{filename}")
+
+    session["images"].append({"path" : "processed/" + filename})
     return render_template('display.html', context=session, enumerate=enumerate), 200
 
 
