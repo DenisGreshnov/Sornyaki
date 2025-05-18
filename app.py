@@ -77,11 +77,9 @@ def delete_image(ind):
 @app.route("/",methods=['POST', 'GET'])
 def index():
     if not session.get("images"): session["images"] = []
-    context = {}
-    context["images"] = session["images"]
 
     if request.method == 'GET':
-        return render_template('display.html', context=context, enumerate=enumerate), 200
+        return render_template('display.html', context=session, enumerate=enumerate), 200
 
     print('post', request.content_type, request.files)
 
@@ -109,8 +107,7 @@ def index():
     processed_image.save(f"static/temp/{filename}")
 
     session["images"].append({"path" : f"temp/{filename}"})
-    context["images"] = session["images"]
-    return render_template('display.html', context=context, enumerate=enumerate), 200
+    return render_template('display.html', context=session, enumerate=enumerate), 200
 
 
 if __name__ == '__main__':
