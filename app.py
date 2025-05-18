@@ -18,11 +18,34 @@ def check_allowed_file(filename): return True
 def secure_filename(filename): return filename
 
 
+@app.route("/magnify/<ind>", methods=["POST", "GET"])
+def magnify_image(ind):
+    if request.method == "POST":
+        return redirect(url_for('index')), 307
+
+    if not session.get("images"):
+        print("No images to magnify")
+        return redirect(url_for('index')), 301
+
+    try:
+        ind = int(ind)
+        magnified_image = session["images"][ind]
+        return render_template("magnify.html", magnified_image=magnified_image), 200
+    except ValueError as e:
+        print(f"Error deleting {ind}, {e}")
+        return redirect(url_for('index')), 301
+
+
+
 @app.route("/delete/<ind>", methods=["POST", "GET"])
 def delete_image(ind):
     if not session.get("images"):
         print("No images to delete")
-        return redirect(url_for('index'), 301)
+        return redirect(url_for('index')), 301
+
+    if len(session["images"]) == 1:
+        session.pop("images", default=None)
+        return redirect(url_for('index')), 301
 
     try:
         ind = int(ind)
@@ -30,7 +53,7 @@ def delete_image(ind):
     except ValueError as e:
         print(f"Error deleting {ind}, {e}")
 
-    return redirect(url_for('index'), 301)
+    return redirect(url_for('index')), 301
 
 
 @app.route("/",methods=['POST', 'GET'])
