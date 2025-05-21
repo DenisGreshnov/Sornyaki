@@ -1,0 +1,6 @@
+path: C:/yolo_project
+train: train/images  
+val: train/images    
+
+names:
+  0: weed
