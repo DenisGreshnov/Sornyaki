@@ -5,11 +5,11 @@ from pathlib import Path
 from flask import Flask, request, render_template, session, redirect, url_for, send_file
 from flask_session import Session
 from uuid import uuid4
-from utils import process_image
+from Project.UI.utils import process_image
 
 
 app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = 'static'
+app.config['UPLOAD_FOLDER'] = 'Project/UI/static'
 app.secret_key = 'BAD_SECRET_KEY'
 app.config["SESSION_PERMANENT"] = True
 app.config["SESSION_TYPE"] = "filesystem"
@@ -102,12 +102,12 @@ def index():
     except IOError:
         return redirect(request.url)
 
-    os.makedirs("static/processed", exist_ok=True)
-    os.makedirs("static/raw", exist_ok=True)
+    os.makedirs(f"{app.config['UPLOAD_FOLDER']}/processed", exist_ok=True)
+    os.makedirs(f"{app.config['UPLOAD_FOLDER']}/raw", exist_ok=True)
     processed_image = process_image(img).image
 
-    img.save(f"static/raw/{filename}")
-    processed_image.save(f"static/processed/{filename}")
+    img.save(f"{app.config['UPLOAD_FOLDER']}/raw/{filename}")
+    processed_image.save(f"{app.config['UPLOAD_FOLDER']}/processed/{filename}")
 
     session["images"].append({"path" : "processed/" + filename})
     return render_template('display.html', context=session, enumerate=enumerate), 200

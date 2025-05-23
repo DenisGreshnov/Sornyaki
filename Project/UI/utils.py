@@ -10,7 +10,7 @@ class ProcessedImage():
 
 
 def process_image(image : str | Image) -> ProcessedImage:
-    model = YOLO("model.pt")  # pretrained YOLO11n model
+    model = YOLO("Project/UI/model.pt")  # pretrained YOLO11n model
     results = model(image)
 
     boxes = []
