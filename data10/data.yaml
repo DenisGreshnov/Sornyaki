@@ -1,6 +1,0 @@
-train: "images"
-val: "eval"
-
-# class names
-names:
-  0: "tobacco"
