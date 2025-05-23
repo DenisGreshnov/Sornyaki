@@ -11,7 +11,7 @@ pip install -r requirements.txt
 Run
 ```bash
 # dev server
-python app.py
+python -m Project.UI.app
 # prod server
 nohup waitress-serve --host 0.0.0.0 --port 8000 Project.UI.app:app &
 # diff? idk
