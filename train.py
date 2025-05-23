@@ -1,7 +1,5 @@
 from ultralytics import YOLO
 
-from ultralytics import YOLO
-
 model = YOLO("yolov8n.pt")  
 
 model.train(
@@ -20,4 +18,3 @@ model.train(
     flipud=0.1,
     name="weed_v3_final"
 )
-

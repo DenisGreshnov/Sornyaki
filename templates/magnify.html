@@ -1,0 +1,52 @@
+{% extends "base.html" %} {% block content %}
+<div
+    id="static-modal"
+    data-modal-backdrop="static"
+    tabindex="-1"
+    aria-hidden="true"
+    class="flex justify-center items-center w-full"
+    >
+        <div class="relative -inset-y-57 inset-x-223 z-10">
+            <a
+                href={{ url_for('index') }}
+                name="cross"
+            >
+                <img src = {{url_for('static', filename='cross.png') }} />
+            </a>
+        </div>
+    <div class="w-4xl bg-stone-800 rounded-xl grid grid-cols-2 gap-4 p-4 mt-8">
+        <div class="relative p-4 w-full max-w-2xl max-h-full">
+            <img
+                src={{ url_for('static', filename=raw_image) }}
+                class="w-full object-cover block"
+            />
+        </div>
+        <div class="relative p-4 w-full max-w-2xl max-h-full">
+            <img
+                src={{ url_for('static', filename=processed_image) }}
+                class="w-full object-cover block"
+            />
+        </div>
+        <div class=" p-2 flex justify-end space-x-4">
+            <a
+                href={{ url_for('download_image', ind=magnified_ind) }}
+                name="download"
+                class="w-10 h-10 rounded-full flex items-center justify-center shadow-sm"
+            >
+                <img src = {{url_for('static', filename='download.png') }} />
+            </a>
+        </div>
+        <div class=" p-2 flex justify-start space-x-4">
+            <a
+                href={{ url_for('delete_image', ind=magnified_ind) }}
+                name="delete"
+                class="w-10 h-10 rounded-full flex items-center justify-center shadow-sm"
+            >
+                <img src = {{url_for('static', filename='trash.png') }} />
+            </a>
+        </div>
+
+    </div>
+
+</div>
+{% endblock %}
