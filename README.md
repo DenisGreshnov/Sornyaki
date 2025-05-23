@@ -13,6 +13,6 @@ Run
 # dev server
 python app.py
 # prod server
-nohup waitress-serve --host 0.0.0.0 --port 8000 app:app &
+nohup waitress-serve --host 0.0.0.0 --port 8000 Project.UI.app:app &
 # diff? idk
 ```
