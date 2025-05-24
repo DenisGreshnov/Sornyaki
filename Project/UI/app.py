@@ -1,6 +1,5 @@
 import os
 import PIL.Image
-from pathlib import Path
 
 from flask import Flask, request, render_template, session, redirect, url_for, send_file
 from flask_session import Session
@@ -19,15 +18,12 @@ def check_allowed_file(filename): return True
 def secure_filename(filename): return str(uuid4()) + '-' + filename
 
 
-
 @app.route("/download/<ind>", methods=["POST", "GET"])
 def download_image(ind):
     try:
         ind = int(ind)
-        path = session["images"][ind]["path"]
-
-        uploads = Path(app.root_path).joinpath(app.config['UPLOAD_FOLDER'])
-        return send_file(uploads / path,  as_attachment=True )
+        path = f"static/{session["images"][ind]["path"]}"
+        return send_file(path,  as_attachment=True)
 
     except Exception as e:
         print("Failed to download", e)
