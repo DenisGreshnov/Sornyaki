@@ -5,21 +5,20 @@ import torch
 torch.cuda.empty_cache()
 
 # Загрузка вашей обученной модели
-model = YOLO("runs/detect/weed_v3_final/weights/best.pt")
+from ultralytics import YOLO
 
-# Параметры для экономии памяти
+model = YOLO("runs/detect/weed_4080_v1/weights/best.pt")
 results = model.predict(
     source="C:\yolo_project\screen",
-    imgsz=320,        
-    batch=2,          
-    conf=0.4,         
-    device="0",       
-    half=True,        
+    imgsz=640,
+    conf=0.4,
+    device=0,
+    half=True,
+    fuse=True,	
     save=True,
-    save_txt=True,
     project="weed_results",
-    name="final_run"
+    name="final_run",
+    exist_ok=True
 )
-
 
 torch.cuda.empty_cache()
