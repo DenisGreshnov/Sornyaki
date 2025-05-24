@@ -104,10 +104,12 @@ def index():
 
     os.makedirs(f"{app.config['UPLOAD_FOLDER']}/processed", exist_ok=True)
     os.makedirs(f"{app.config['UPLOAD_FOLDER']}/raw", exist_ok=True)
-    processed_image = process_image(img).image
-
     img.save(f"{app.config['UPLOAD_FOLDER']}/raw/{filename}")
-    processed_image.save(f"{app.config['UPLOAD_FOLDER']}/processed/{filename}")
+
+    process_image(
+        f"{app.config['UPLOAD_FOLDER']}/raw/{filename}",
+        f"{app.config['UPLOAD_FOLDER']}/processed/{filename}"
+    )
 
     session["images"].append({"path" : "processed/" + filename})
     return render_template('display.html', context=session, enumerate=enumerate), 200
