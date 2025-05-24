@@ -1,20 +1,16 @@
 from ultralytics import YOLO
 
-model = YOLO("yolov8n.pt")  
-
+model = YOLO("yolov8x.pt")  
 model.train(
-    data="data.yaml",
-    epochs=500,
-    imgsz=320,
-    batch=16,
-    workers=0,
+    data="data.yaml",        
+    epochs=300,
+    imgsz=640,
+    batch=24,               
+    device=0,
+    amp=True,
+    workers=8,  
     lr0=0.001,
-    weight_decay=0.0005,
-    patience=200,
-    augment=True,
-    hsv_h=0.2,
-    hsv_s=0.6,
-    degrees=15,
-    flipud=0.1,
-    name="weed_v3_final"
+    cos_lr=True,
+    cache="disk",
+    plots=True   
 )
