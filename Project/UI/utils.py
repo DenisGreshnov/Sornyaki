@@ -3,13 +3,14 @@ import numpy as np
 from ultralytics import YOLO
 
 
-def process_image(image_path, mask_path) -> None:
+def process_image(image_path, processed_path, masked_path) -> None:
     model = YOLO("Project/UI/model.pt")
 
     image = cv2.imread(image_path)
-    image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+    # image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 
-    results = model(image_rgb)[0]
+    results = model(image)[0]
+    results.save(processed_path)
 
     mask_tobacco = np.zeros(image.shape[:2], dtype=np.uint8)
 
@@ -29,5 +30,5 @@ def process_image(image_path, mask_path) -> None:
 
     green_mask[mask_tobacco == 255] = 0
 
-    cv2.imwrite(mask_path, green_mask)
+    cv2.imwrite(masked_path, green_mask)
     return

@@ -48,7 +48,14 @@ def magnify_image(ind):
         ind = int(ind)
         processed_image = session["images"][ind]["path"]
         raw_image = "raw" + session["images"][ind]["path"].strip("processed")
-        return render_template("magnify.html", raw_image = raw_image, processed_image=processed_image, magnified_ind=ind), 200
+        masked_image = "masked" + session["images"][ind]["path"].strip("processed")
+        return render_template(
+            "magnify.html",
+            raw_image = raw_image,
+            processed_image=processed_image,
+            masked_image=masked_image,
+            magnified_ind=ind
+        ), 200
     except ValueError as e:
         print(f"Error deleting {ind}, {e}")
         return redirect(url_for('index')), 301
@@ -102,13 +109,15 @@ def index():
     except IOError:
         return redirect(request.url)
 
-    os.makedirs(f"{app.config['UPLOAD_FOLDER']}/processed", exist_ok=True)
     os.makedirs(f"{app.config['UPLOAD_FOLDER']}/raw", exist_ok=True)
-    img.save(f"{app.config['UPLOAD_FOLDER']}/raw/{filename}")
+    os.makedirs(f"{app.config['UPLOAD_FOLDER']}/processed", exist_ok=True)
+    os.makedirs(f"{app.config['UPLOAD_FOLDER']}/masked", exist_ok=True)
 
+    img.save(f"{app.config['UPLOAD_FOLDER']}/raw/{filename}")
     process_image(
         f"{app.config['UPLOAD_FOLDER']}/raw/{filename}",
-        f"{app.config['UPLOAD_FOLDER']}/processed/{filename}"
+        f"{app.config['UPLOAD_FOLDER']}/processed/{filename}",
+        f"{app.config['UPLOAD_FOLDER']}/masked/{filename}"
     )
 
     session["images"].append({"path" : "processed/" + filename})
