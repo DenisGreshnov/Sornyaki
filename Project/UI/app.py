@@ -1,5 +1,6 @@
 import os
 import PIL.Image
+import zipfile
 
 from flask import Flask, request, render_template, session, redirect, url_for, send_file
 from flask_session import Session
@@ -22,8 +23,21 @@ def secure_filename(filename): return str(uuid4()) + '-' + filename
 def download_image(ind):
     try:
         ind = int(ind)
-        path = f"static/{session["images"][ind]["path"]}"
-        return send_file(path,  as_attachment=True)
+        name = session["images"][ind]["path"].strip('processed/')
+        files = [
+            f"processed/{name}",
+            f"masked/{name}",
+        ]
+
+        archive_name = name.split(".")[0] + ".zip"
+        os.makedirs(f"{app.config['UPLOAD_FOLDER']}/archives", exist_ok=True)
+
+        zf = zipfile.ZipFile(f"{app.config['UPLOAD_FOLDER']}/archives/{archive_name}", "w")
+        for filename in files:
+            zf.write(f"{app.config['UPLOAD_FOLDER']}/{filename}", filename.replace("/", "_"))
+        zf.close()
+
+        return send_file(f"static/archives/{archive_name}", as_attachment=True)
 
     except Exception as e:
         print("Failed to download", e)
