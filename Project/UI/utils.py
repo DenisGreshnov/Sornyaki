@@ -17,7 +17,7 @@ def process_image(image_path, processed_path, masked_path) -> None:
     for box, cls in zip(results.boxes.xyxy, results.boxes.cls):
         class_name = model.names[int(cls)]
 
-        if "tobacco" in class_name.lower():
+        if "weed" in class_name.lower():
             x1, y1, x2, y2 = map(int, box)
             cv2.rectangle(mask_tobacco, (x1, y1), (x2, y2), 255, -1)
 
