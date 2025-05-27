@@ -30,8 +30,8 @@
               } catch (error) {
                 console.error("Network error:", error);
               }
-              console.log(`… file[${i}].name = ${file.name}`);
-              console.log("{{url_for('index')}}");
+              var infoArea = document.getElementById( 'file-upload-filename' );
+              infoArea.textContent = `Uploading ${file.name}`
             }
           });
         } else {
