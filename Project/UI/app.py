@@ -1,6 +1,7 @@
 import os
 import PIL.Image
 import zipfile
+from dotenv import load_dotenv
 
 from flask import Flask, request, render_template, session, redirect, url_for, send_file
 from flask_session import Session
@@ -8,9 +9,10 @@ from uuid import uuid4
 from Project.UI.utils import process_image
 
 
+load_dotenv()
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'Project/UI/static'
-app.secret_key = 'BAD_SECRET_KEY'
+app.secret_key = os.getenv("APP_SECRET")
 app.config["SESSION_PERMANENT"] = True
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
