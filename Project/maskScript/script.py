@@ -22,10 +22,8 @@ for box, cls in zip(results.boxes.xyxy, results.boxes.cls):
         mean_squre += 2 * (abs(x1 - x2) + abs(y1 - y2))
         count+=1
 
-print(mean_squre)
 mean_squre /= count
 mean_squre = int(mean_squre)
-print(mean_squre)
 
 hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
 lower_green = np.array([35, 40, 40])
