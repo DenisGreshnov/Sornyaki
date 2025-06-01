@@ -21,6 +21,18 @@ def check_allowed_file(filename): return True
 def secure_filename(filename): return str(uuid4()) + '-' + filename
 
 
+@app.route("/coordinates/<ind>", methods=["POST", "GET"])
+def get_coordinates(ind):
+    try:
+        ind = int(ind)
+        name = session["images"][ind]["path"].strip('processed/')
+        return send_file(f"static/coordinates/{name}.txt", as_attachment=True)
+
+    except Exception as e:
+        print("Failed to get coordinates", e)
+        return redirect(url_for('index')), 301
+
+
 @app.route("/download/<ind>", methods=["POST", "GET"])
 def download_image(ind):
     try:
@@ -29,6 +41,8 @@ def download_image(ind):
         files = [
             f"processed/{name}",
             f"masked/{name}",
+            f"dots/{name}",
+            f"coordinates/{name}.txt"
         ]
 
         archive_name = name.split(".")[0] + ".zip"
@@ -43,8 +57,7 @@ def download_image(ind):
 
     except Exception as e:
         print("Failed to download", e)
-
-    return redirect(url_for('index')), 301
+        return redirect(url_for('index')), 301
 
 
 @app.route("/magnify/<ind>", methods=["POST", "GET"])
@@ -61,12 +74,14 @@ def magnify_image(ind):
         processed_image = session["images"][ind]["path"]
         raw_image = "raw" + session["images"][ind]["path"].strip("processed")
         masked_image = "masked" + session["images"][ind]["path"].strip("processed")
+        dots_image = "dots" + session["images"][ind]["path"].strip("processed")
         return render_template(
             "magnify.html",
             raw_image = raw_image,
             processed_image=processed_image,
             masked_image=masked_image,
-            magnified_ind=ind
+            magnified_ind=ind,
+            dots_image=dots_image
         ), 200
     except ValueError as e:
         print(f"Error deleting {ind}, {e}")
@@ -89,7 +104,6 @@ def delete_image(ind):
         session["images"].pop(ind)
     except ValueError as e:
         print(f"Error deleting {ind}, {e}")
-
     return redirect(url_for('index')), 301
 
 
@@ -124,15 +138,20 @@ def index():
     os.makedirs(f"{app.config['UPLOAD_FOLDER']}/raw", exist_ok=True)
     os.makedirs(f"{app.config['UPLOAD_FOLDER']}/processed", exist_ok=True)
     os.makedirs(f"{app.config['UPLOAD_FOLDER']}/masked", exist_ok=True)
+    os.makedirs(f"{app.config['UPLOAD_FOLDER']}/dots", exist_ok=True)
+    os.makedirs(f"{app.config['UPLOAD_FOLDER']}/coordinates", exist_ok=True)
 
     img.save(f"{app.config['UPLOAD_FOLDER']}/raw/{filename}")
-    process_image(
+    coordinates = process_image(
         f"{app.config['UPLOAD_FOLDER']}/raw/{filename}",
         f"{app.config['UPLOAD_FOLDER']}/processed/{filename}",
-        f"{app.config['UPLOAD_FOLDER']}/masked/{filename}"
+        f"{app.config['UPLOAD_FOLDER']}/masked/{filename}",
+        f"{app.config['UPLOAD_FOLDER']}/dots/{filename}"
     )
+    with open(f"{app.config['UPLOAD_FOLDER']}/coordinates/{filename}.txt", 'w') as file:
+        file.write(str(coordinates))
 
-    session["images"].append({"path" : "processed/" + filename})
+    session["images"].append({"path" : "processed/" + filename, "coordinates" : coordinates})
     return render_template('display.html', context=session, enumerate=enumerate), 200
 
 

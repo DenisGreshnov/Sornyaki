@@ -6,7 +6,7 @@
     aria-hidden="true"
     class="flex justify-center items-center w-full"
     >
-    <div class="w-4xl bg-stone-800 rounded-xl grid grid-cols-3 gap-4 p-4 mt-8">
+    <div class="w-4xl bg-stone-800 rounded-xl grid grid-cols-2 gap-4 p-4 mt-8">
         <div class="relative p-4 w-full max-w-2xl max-h-full">
             <img
                 src={{ url_for('static', filename=raw_image) }}
@@ -25,22 +25,27 @@
                 class="w-full object-cover block"
             />
         </div>
-        <div></div>
-        <div class="flex justify-center space-x-4">
-            <a
-                href={{ url_for('index') }}
-                name="cross"
-            >
-                <img src = {{url_for('static', filename='back.png') }} />
-            </a>
-
-            <a
-                href={{ url_for('delete_image', ind=magnified_ind) }}
-                name="delete"
-                class="w-10 h-10 rounded-full flex items-center justify-center shadow-sm"
-            >
-                <img src = {{url_for('static', filename='trash.png') }} />
-            </a>
+        <div class="relative p-4 w-full max-w-2xl max-h-full">
+            <img
+                src={{ url_for('static', filename=dots_image) }}
+                class="w-full object-cover block"
+            />
+        </div>
+        <div class="flex justify-end space-x-4"><a
+            href={{ url_for('index') }}
+            name="cross"
+        >
+            <img src = {{url_for('static', filename='back.png') }} />
+        </a>
+        <a
+            href={{ url_for('delete_image', ind=magnified_ind) }}
+            name="delete"
+            class="w-10 h-10 rounded-full flex items-center justify-center shadow-sm"
+        >
+            <img src = {{url_for('static', filename='trash.png') }} />
+        </a>
+        </div>
+        <div class="flex justify-start space-x-4">
 
             <a
                 href={{ url_for('download_image', ind=magnified_ind) }}
@@ -49,6 +54,14 @@
             >
                 <img src = {{url_for('static', filename='download.png') }} />
             </a>
+            <a
+                href={{ url_for('get_coordinates', ind=magnified_ind) }}
+                name="coordinates"
+                class="w-10 h-10 rounded-full flex items-center justify-center shadow-sm"
+            >
+                <img src = {{url_for('static', filename='coordinates.png') }} />
+            </a>
+
         </div>
 
     </div>
