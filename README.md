@@ -1,6 +1,6 @@
 # Sornyaki
 
-## Live demo: http://91.132.59.202:8000/
+## Live demo: http://80.74.29.240:8000/
 
 ## Running WebUI
 Prepare env
@@ -15,5 +15,4 @@ Run
 python -m Project.UI.app
 # prod server
 nohup waitress-serve --host 0.0.0.0 --port 8000 Project.UI.app:app &
-# diff? idk
 ```
